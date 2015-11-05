@@ -22,7 +22,7 @@ module.exports = function(grunt) {
 
     nodemon: {
       dev: {
-        script: 'server.js'
+        script: 'index.js'
       }
     },
 
@@ -113,6 +113,7 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('build', [
+    'test',
     'jshint',
     'cssmin',
     'concat',
@@ -130,7 +131,7 @@ module.exports = function(grunt) {
   grunt.registerTask('deploy', [
     // add your deploy tasks here
     'build',
-    'test'
+    'upload'
   ]);
 
   grunt.registerTask('heroku:production', 'deploy');
