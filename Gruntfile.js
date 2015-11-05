@@ -116,8 +116,8 @@ module.exports = function(grunt) {
     'test',
     'jshint',
     'cssmin',
-    'concat',
-    'uglify'
+    'concat'
+
   ]);
 
   grunt.registerTask('upload', function(n) {
@@ -134,6 +134,6 @@ module.exports = function(grunt) {
     'upload'
   ]);
 
-  grunt.registerTask('heroku:production', 'deploy');
+  grunt.registerTask('heroku:production', 'uglify');
 
 };
