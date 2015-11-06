@@ -149,7 +149,7 @@ module.exports = function(grunt) {
       grunt.task.run([ 'server-dev' ]);
     }
   });
-
+//test
   grunt.registerTask('deploy', [
 
     'test',
