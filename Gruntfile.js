@@ -3,13 +3,15 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
+
+      options: {
+        separator: ';'
+      },
       dist: {
-        src: [
-          'public/client/**/*.js'
-        ],
-        dest: 'public/dist/production.js'
+        src: ['public/client/**/*.js'],
+        dest: 'public/dist/<%= pkg.name %>.js'
       }
-    },
+          },
 
     mochaTest: {
       test: {
@@ -22,25 +24,32 @@ module.exports = function(grunt) {
 
     nodemon: {
       dev: {
-        script: 'index.js'
+        script: 'server.js'
       }
     },
 
     uglify: {
+
       options: {
-        mangle: false
+        banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
       },
-      build: {
-        src: 'public/dist/production.js',
-        dest: 'public/dist/production.min.js'
+      dist: {
+        files: {
+          'public/dist/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']
+        }
       }
-    },
+          },
 
     jshint: {
       files: [
-          'public/client/*.js',
-          'public/lib/*.js'
-      ],
+
+        'Gruntfile.js',
+        'app/**/*.js',
+        'public/**/*.js',
+        'lib/**/*.js',
+        './*.js',
+        'spec/**/*.js'
+              ],
       options: {
         force: 'true',
         jshintrc: '.jshintrc',
@@ -52,12 +61,16 @@ module.exports = function(grunt) {
     },
 
     cssmin: {
-      target: {
+
+      options: {
+        keepSpecialComments: 0
+      },
+      dist: {
         files: {
-          'public/dist/style.min.css': 'public/*.css'
+          'public/dist/style.min.css': 'public/style.css'
         }
       }
-    },
+          },
 
     watch: {
       scripts: {
@@ -78,7 +91,14 @@ module.exports = function(grunt) {
 
     shell: {
       prodServer: {
-      }
+
+        command: 'git push heroku master',
+        options: {
+          stdout: true,
+          stderr: true,
+          failOnError: true
+        }
+              }
     },
   });
 
@@ -109,31 +129,33 @@ module.exports = function(grunt) {
   ////////////////////////////////////////////////////
 
   grunt.registerTask('test', [
-    'mochaTest'
+
+    'jshint',
+        'mochaTest'
   ]);
 
   grunt.registerTask('build', [
-    'test',
-    'jshint',
-    'cssmin',
-    'concat'
 
-  ]);
+    'concat',
+    'uglify',
+    'cssmin'
+      ]);
 
   grunt.registerTask('upload', function(n) {
     if(grunt.option('prod')) {
-      // add your production server task here
-    } else {
+
+      grunt.task.run([ 'shell:prodServer' ]);
+          } else {
       grunt.task.run([ 'server-dev' ]);
     }
   });
 
   grunt.registerTask('deploy', [
-    // add your deploy tasks here
+
+    'test',
     'build',
     'upload'
-  ]);
+      ]);
 
-  grunt.registerTask('heroku:production', 'uglify');
 
 };
