@@ -1,32 +1,16 @@
 var mongoose = require('mongoose');
 
-mongoURI = process.env.CUSTOMCONNSTR_MONGOLAB_URI || 'mongodb://localhost/shortlydb';
+mongoURI = 'mongodb://heroku_0rs8265n:73f09tdemoked0h7ojuog4l23e@ds049854.mongolab.com:49854/heroku_0rs8265n' || 'mongodb://localhost/shortlydb';
 mongoose.connect(mongoURI);
 
 // Run in seperate terminal window using 'mongod'
 var db = mongoose.connection;
-
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
  console.log('Mongodb connection open');
 });
 
-module.exports = mongoose;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+module.exports = db;
 
 
 // var Bookshelf = require('bookshelf');
