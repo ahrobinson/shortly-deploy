@@ -5,3 +5,5 @@ var app = require('./server.js');
 app.listen(port);
 
 console.log('Server now listening on port ' + port);
+
+module.exports = port;
