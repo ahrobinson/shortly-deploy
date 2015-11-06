@@ -3,7 +3,7 @@ var port = require('../server.js');
 
 
 
-mongoURI = port === process.env.PORT ? 'mongodb://heroku_0rs8265n:73f09tdemoked0h7ojuog4l23e@ds049854.mongolab.com:49854/heroku_0rs8265n' : 'mongodb://localhost/shortlydb';
+mongoURI = process.env.MONGOLAB_URI || 'mongodb://localhost/shortlydb';
 mongoose.connect(mongoURI);
 
 // Run in seperate terminal window using 'mongod'
